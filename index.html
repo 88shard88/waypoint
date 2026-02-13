@@ -1,0 +1,516 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>WAYPOINT original soundtrack</title>
+
+<style>
+body{
+    margin:0;
+    background:#ffffff;
+    font-family: Helvetica, Arial, sans-serif;
+    overflow: hidden;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+/* ---------- TOP BAR ---------- */
+
+.topbar{
+    background:black;
+    color:white;
+    padding:22px 40px;
+    font-style:italic;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    font-size:28px;
+    flex-shrink: 0;
+}
+
+.topbar .right{
+    font-size:20px;
+}
+
+.track-red{
+    color:#FF0000;
+}
+
+.track-yellow{
+    color:#FFFF00;
+}
+
+/* ---------- CENTER ---------- */
+
+.center{
+    text-align:center;
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    min-height: 0;
+    overflow: hidden;
+}
+
+.center img{
+    max-width: 80%;
+    max-height: 100%;
+    object-fit: contain;
+}
+
+/* ---------- PLAYER ---------- */
+
+.player{
+    width:100%;
+    background:black;
+    color:white;
+    padding:22px 60px 28px 60px;
+    box-sizing:border-box;
+    flex-shrink: 0;
+    position: relative;
+}
+
+.progress-row{
+    display:flex;
+    align-items:center;
+    gap:25px;
+}
+
+.time{
+    width:60px;
+    font-size:22px;
+}
+
+.progress{
+    flex:1;
+    height:4px;
+    background:#444;
+    position:relative;
+    cursor:pointer;
+}
+
+.progress-fill{
+    position:absolute;
+    height:100%;
+    width:0%;
+    background:white;
+}
+
+.handle{
+    position:absolute;
+    top:50%;
+    transform:translate(-50%,-50%);
+    width:16px;
+    height:16px;
+    background:white;
+    border-radius:50%;
+    left:0%;
+}
+
+.controls{
+    margin-top:25px;
+    text-align:center;
+}
+
+.controls button{
+    background:none;
+    border:none;
+    cursor:pointer;
+    margin:0 40px;
+    padding:0;
+}
+
+.controls svg{
+    fill:white;
+    width:36px;
+    height:36px;
+}
+
+.loop-inactive svg{
+    opacity:0.4;
+}
+
+.loop-active svg{
+    opacity:1;
+}
+
+/* ---------- NAVIGATION ARROWS ---------- */
+
+.nav-arrow{
+    position:absolute;
+    bottom:35px;
+    background:none;
+    border:none;
+    cursor:pointer;
+    padding:0;
+    z-index:10;
+}
+
+.nav-arrow.left{
+    left:30px;
+}
+
+.nav-arrow.right{
+    right:30px;
+}
+
+.nav-arrow svg{
+    fill:white;
+    width:36px;
+    height:36px;
+    opacity:0.4;
+    transition: opacity 0.2s;
+}
+
+.nav-arrow:hover svg{
+    opacity:1;
+}
+
+/* ---------- TRACK VISIBILITY ---------- */
+
+.track-container{
+    display:none;
+    width:100%;
+    height:100%;
+    flex-direction:column;
+}
+
+.track-container.active{
+    display:flex;
+}
+
+/* Responsive adjustments for smaller screens */
+@media (max-height: 768px) {
+    .topbar {
+        padding: 15px 30px;
+        font-size: 24px;
+    }
+    
+    .topbar .right {
+        font-size: 18px;
+    }
+    
+    .center {
+        padding: 15px;
+    }
+    
+    .player {
+        padding: 18px 50px 24px 50px;
+    }
+}
+
+@media (max-height: 600px) {
+    .topbar {
+        padding: 12px 25px;
+        font-size: 20px;
+    }
+    
+    .topbar .right {
+        font-size: 16px;
+    }
+    
+    .center {
+        padding: 10px;
+    }
+    
+    .player {
+        padding: 15px 40px 20px 40px;
+    }
+    
+    .time {
+        font-size: 18px;
+    }
+    
+    .controls svg {
+        width: 32px;
+        height: 32px;
+    }
+    
+    .nav-arrow svg{
+        width: 32px;
+        height: 32px;
+    }
+}
+</style>
+</head>
+<body>
+
+<!-- TRACK 1: Onion Steak -->
+<div class="track-container active" id="track1">
+    <div class="topbar">
+        <div>track 07 – Onion Steak / Battle</div>
+        <div class="right">WAYPOINT original soundtrack</div>
+    </div>
+
+    <div class="center">
+        <img src="cover.png" alt="cover">
+    </div>
+
+    <div class="player">
+        <div class="progress-row">
+            <div class="time" id="current1">0:00</div>
+            <div class="progress" id="progress1">
+                <div class="progress-fill" id="fill1"></div>
+                <div class="handle" id="handle1"></div>
+            </div>
+            <div class="time" id="duration1">0:00</div>
+        </div>
+
+        <div class="controls">
+            <button id="play1">
+                <svg viewBox="0 0 24 24">
+                    <polygon points="6,4 20,12 6,20"/>
+                </svg>
+            </button>
+            <button id="pause1" style="display:none;">
+                <svg viewBox="0 0 24 24">
+                    <rect x="5" y="4" width="5" height="16"/>
+                    <rect x="14" y="4" width="5" height="16"/>
+                </svg>
+            </button>
+            <button id="loop1" class="loop-inactive">
+                <svg viewBox="0 0 24 24">
+                    <path d="M7 7h9l-2-2m2 2l-2 2M17 17H8l2 2m-2-2l2-2"
+                    stroke="white" stroke-width="2" fill="none"/>
+                </svg>
+            </button>
+        </div>
+
+        <!-- Right arrow only -->
+        <button class="nav-arrow right" onclick="switchTrack(2)">
+            <svg viewBox="0 0 24 24">
+                <polygon points="8,4 18,12 8,20"/>
+            </svg>
+        </button>
+    </div>
+</div>
+
+<!-- TRACK 2: Posthaste -->
+<div class="track-container" id="track2">
+    <div class="topbar">
+        <div>
+            track 12 – <span class="track-yellow">Posthaste</span>
+        </div>
+        <div class="right">WAYPOINT original soundtrack</div>
+    </div>
+
+    <div class="center">
+        <img src="cover.png" alt="cover">
+    </div>
+
+    <div class="player">
+        <div class="progress-row">
+            <div class="time" id="current2">0:00</div>
+            <div class="progress" id="progress2">
+                <div class="progress-fill" id="fill2"></div>
+                <div class="handle" id="handle2"></div>
+            </div>
+            <div class="time" id="duration2">0:00</div>
+        </div>
+
+        <div class="controls">
+            <button id="play2">
+                <svg viewBox="0 0 24 24">
+                    <polygon points="6,4 20,12 6,20"/>
+                </svg>
+            </button>
+            <button id="pause2" style="display:none;">
+                <svg viewBox="0 0 24 24">
+                    <rect x="5" y="4" width="5" height="16"/>
+                    <rect x="14" y="4" width="5" height="16"/>
+                </svg>
+            </button>
+            <button id="loop2" class="loop-inactive">
+                <svg viewBox="0 0 24 24">
+                    <path d="M7 7h9l-2-2m2 2l-2 2M17 17H8l2 2m-2-2l2-2"
+                    stroke="white" stroke-width="2" fill="none"/>
+                </svg>
+            </button>
+        </div>
+
+        <!-- Left and right arrows -->
+        <button class="nav-arrow left" onclick="switchTrack(1)">
+            <svg viewBox="0 0 24 24">
+                <polygon points="16,4 6,12 16,20"/>
+            </svg>
+        </button>
+        <button class="nav-arrow right" onclick="switchTrack(3)">
+            <svg viewBox="0 0 24 24">
+                <polygon points="8,4 18,12 8,20"/>
+            </svg>
+        </button>
+    </div>
+</div>
+
+<!-- TRACK 3: Orchestrated Impact -->
+<div class="track-container" id="track3">
+    <div class="topbar">
+        <div>
+            track 15 – <span class="track-red">Orchestrated Impact</span>
+        </div>
+        <div class="right">WAYPOINT original soundtrack</div>
+    </div>
+
+    <div class="center">
+        <img src="cover.png" alt="cover">
+    </div>
+
+    <div class="player">
+        <div class="progress-row">
+            <div class="time" id="current3">0:00</div>
+            <div class="progress" id="progress3">
+                <div class="progress-fill" id="fill3"></div>
+                <div class="handle" id="handle3"></div>
+            </div>
+            <div class="time" id="duration3">0:00</div>
+        </div>
+
+        <div class="controls">
+            <button id="play3">
+                <svg viewBox="0 0 24 24">
+                    <polygon points="6,4 20,12 6,20"/>
+                </svg>
+            </button>
+            <button id="pause3" style="display:none;">
+                <svg viewBox="0 0 24 24">
+                    <rect x="5" y="4" width="5" height="16"/>
+                    <rect x="14" y="4" width="5" height="16"/>
+                </svg>
+            </button>
+            <button id="loop3" class="loop-inactive">
+                <svg viewBox="0 0 24 24">
+                    <path d="M7 7h9l-2-2m2 2l-2 2M17 17H8l2 2m-2-2l2-2"
+                    stroke="white" stroke-width="2" fill="none"/>
+                </svg>
+            </button>
+        </div>
+
+        <!-- Left arrow only -->
+        <button class="nav-arrow left" onclick="switchTrack(2)">
+            <svg viewBox="0 0 24 24">
+                <polygon points="16,4 6,12 16,20"/>
+            </svg>
+        </button>
+    </div>
+</div>
+
+<!-- Audio elements -->
+<audio id="audio1" src="track.mp3"></audio>
+<audio id="audio2" src="pretrack2.mp3"></audio>
+<audio id="audio3" src="track2.mp3"></audio>
+
+<script>
+let currentTrack = 1;
+
+// Track switching function
+function switchTrack(trackNum){
+    // Pause current track
+    const currentAudio = document.getElementById(`audio${currentTrack}`);
+    currentAudio.pause();
+    
+    // Hide current track container
+    document.getElementById(`track${currentTrack}`).classList.remove('active');
+    
+    // Show new track container
+    document.getElementById(`track${trackNum}`).classList.add('active');
+    
+    currentTrack = trackNum;
+}
+
+// Initialize each track's player
+function initPlayer(trackNum){
+    const audio = document.getElementById(`audio${trackNum}`);
+    const play = document.getElementById(`play${trackNum}`);
+    const pause = document.getElementById(`pause${trackNum}`);
+    const loopBtn = document.getElementById(`loop${trackNum}`);
+    const progress = document.getElementById(`progress${trackNum}`);
+    const fill = document.getElementById(`fill${trackNum}`);
+    const handle = document.getElementById(`handle${trackNum}`);
+    const current = document.getElementById(`current${trackNum}`);
+    const duration = document.getElementById(`duration${trackNum}`);
+
+    let dragging = false;
+    let loopEnabled = false;
+
+    function formatTime(sec){
+        const m = Math.floor(sec/60);
+        const s = Math.floor(sec%60).toString().padStart(2,"0");
+        return `${m}:${s}`;
+    }
+
+    audio.addEventListener("loadedmetadata",()=>{
+        duration.textContent = formatTime(audio.duration);
+    });
+
+    audio.addEventListener("timeupdate",()=>{
+        if(dragging) return;
+        const percent = (audio.currentTime/audio.duration)*100;
+        fill.style.width = percent + "%";
+        handle.style.left = percent + "%";
+        current.textContent = formatTime(audio.currentTime);
+    });
+
+    audio.addEventListener("ended",()=>{
+        if(loopEnabled){
+            audio.currentTime = 0;
+            audio.play();
+        } else {
+            play.style.display="inline";
+            pause.style.display="none";
+        }
+    });
+
+    play.onclick = ()=>{
+        audio.play();
+        play.style.display="none";
+        pause.style.display="inline";
+    };
+
+    pause.onclick = ()=>{
+        audio.pause();
+        pause.style.display="none";
+        play.style.display="inline";
+    };
+
+    loopBtn.onclick = ()=>{
+        loopEnabled = !loopEnabled;
+        loopBtn.className = loopEnabled ? "loop-active" : "loop-inactive";
+    };
+
+    function setProgress(e){
+        const rect = progress.getBoundingClientRect();
+        const percent = (e.clientX - rect.left)/rect.width;
+        audio.currentTime = percent * audio.duration;
+    }
+
+    progress.addEventListener("mousedown",(e)=>{
+        dragging = true;
+        audio.pause();
+        setProgress(e);
+    });
+
+    document.addEventListener("mousemove",(e)=>{
+        if(dragging && currentTrack === trackNum){
+            setProgress(e);
+        }
+    });
+
+    document.addEventListener("mouseup",()=>{
+        if(dragging && currentTrack === trackNum){
+            dragging = false;
+            audio.play();
+        }
+    });
+}
+
+// Initialize all three players
+initPlayer(1);
+initPlayer(2);
+initPlayer(3);
+</script>
+
+</body>
+</html>
